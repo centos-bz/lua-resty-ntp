@@ -32,7 +32,7 @@ local function connect(ntp_server, timeout)
     -- unpack data
     local _,_,_,_,_,_,_,_,time = struct.unpack(">IIIIIIIII",data)
     local utc_time = time - 2208988800
-    return utc_time
+    return utc_time, err
 
 end
 
