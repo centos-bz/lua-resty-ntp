@@ -7,9 +7,9 @@ local table_concat = table.concat
 local function connect(ntp_server, timeout)
     -- set timeout
     local sock = ngx_socket_udp()
-    sock:settimeout(timeout)
 
     -- connect ntp server
+    sock:settimeout(timeout)
     local ok, err = sock:setpeername(ntp_server, 123)
     if not ok then
         return nil, table_concat({"failed to connect to ntp: ", err})
@@ -17,12 +17,14 @@ local function connect(ntp_server, timeout)
 
     -- pack and send data to ntp server
     local data = struct.pack("<IIIIIIIIIIII",0x23,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0)
+    sock:settimeout(timeout)
     local ok, err = sock:send(data)
     if not ok then
         return nil, "failed to send."
     end
 
     -- receive data
+    sock:settimeout(timeout)
     local data, err = sock:receive()
     if not data then    
         return nil, table_concat({"failed to read a packet: ", err})
