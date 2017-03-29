@@ -1,6 +1,6 @@
 -- Copyright (C) Maohai Zhu (admin@centos.bz).
 
-local struct = require("struct")
+local struct = require "struct"
 local ngx_socket_udp = ngx.socket.udp
 local table_concat = table.concat
 
@@ -8,8 +8,7 @@ local function connect(ntp_server, timeout)
     -- set timeout
     local sock = ngx_socket_udp()
 
-    -- connect ntp server
-    sock:settimeout(timeout)
+    -- set ntp server
     local ok, err = sock:setpeername(ntp_server, 123)
     if not ok then
         return nil, table_concat({"failed to connect to ntp: ", err})
@@ -17,7 +16,6 @@ local function connect(ntp_server, timeout)
 
     -- pack and send data to ntp server
     local data = struct.pack("<IIIIIIIIIIII",0x23,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0)
-    sock:settimeout(timeout)
     local ok, err = sock:send(data)
     if not ok then
         return nil, "failed to send."
@@ -29,6 +27,7 @@ local function connect(ntp_server, timeout)
     if not data then    
         return nil, table_concat({"failed to read a packet: ", err})
     end
+
     sock:close()
 
     -- unpack data
@@ -54,12 +53,14 @@ local function utctime(ntp_server, retry, timeout)
 
     local utc_time, err
 
+    
     for i=1,retry do
         utc_time, err = connect(ntp_server, timeout)
         if utc_time then
             break
         end    
     end
+    
     return utc_time, err
     
 end
