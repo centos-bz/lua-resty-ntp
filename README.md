@@ -26,7 +26,7 @@ Synopsis
     # nginx.conf:
 
     lua_package_path "/path/to/lua-resty-string/lib/?.lua;;";
-
+    resolver 119.29.29.29;
     server {
         location = /test {
             content_by_lua_block {
