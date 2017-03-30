@@ -11,7 +11,7 @@ local function connect(ntp_server, timeout)
     -- set ntp server
     local ok, err = sock:setpeername(ntp_server, 123)
     if not ok then
-        return nil, table_concat({"failed to connect to ntp: ", err})
+        return nil, table_concat({"failed to set ntp server: ", err})
     end
 
     -- pack and send data to ntp server
