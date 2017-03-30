@@ -30,7 +30,7 @@ Synopsis
     server {
         location = /test {
             content_by_lua_block {
-                local ntp = require "ntp"
+                local ntp = require "resty.ntp"
                 -- ntp.utctime(ntp_server, retry , timeout)
                 local utctime,err =  ntp.utctime("pool.ntp.org", 3, 1000)
                 if utctime then
